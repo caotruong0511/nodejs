@@ -1,33 +1,15 @@
-import { Router } from "express";
+import { Router } from "express"; //goi class rauter
+import { create, list, read, remove, update } from "../controllers/product";
 const router=Router();
 import {checkAuth} from '../middlewares/checkAuth'
 
-router.get('/products', checkAuth, (req, res) => {
-    const products = [
-        {id: 1, name: "Product A"},
-        {id: 2, name: "Product B"}
-    ];
-    res.json(products);
-});
+router.get('/products', checkAuth, list);
 
-router.post('/products', checkAuth, (req, res) => {
-    console.log(req);
-    const products = [
-        {id: 1, name: "Product A"},
-        {id: 2, name: "Product B"}
-    ];
-    products.push(req.body);
-    res.json(products);
-  });
+router.post('/products', checkAuth,create);
   
-  router.delete('/product/:id',(req,res)=>{
-    const products = [
-        {id: 1, name: "Product A"},
-        {id: 2, name: "Product B"}
-    ];
-    res.json(products.filter(item => item.id===+req.params.id));
-  })
-
+  router.get('/product/:id', checkAuth,read)
+  router.delete('/product/:id', checkAuth,remove)
+  router.put('/product/:id', checkAuth,update);
 
 
   export default router;
