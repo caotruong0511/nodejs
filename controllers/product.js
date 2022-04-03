@@ -1,16 +1,38 @@
 import Product from '../models/product';
 //list sản phẩm
-export const list =async (req, res) => {
+export const detail =async (req, res) => {
+    const filter=req.query.id
+    console.log(filter)
     try {
-        const products=await Product.find();
+        const products=await Product.find({category:filter}).populate("category");
         res.json(products);
     } catch (error) {
         res.status(400).json({
-            message:"Không thêm được sản phẩm anh ei"
+            message:"Không hien thi được sản phẩm anh ei"
         })
     }
-//   res.json(products);
 };
+export const list =async (req, res) => {
+  
+    try {
+        const products=await Product.find().populate("category");
+        res.json(products);
+    } catch (error) {
+        res.status(400).json({
+            message:"Không hien thi được sản phẩm anh ei"
+        })
+    }
+};
+export const getByModel = async (req, res) => {
+    const model = req.params.model;
+    try {
+        const products = await Product.find({ model }).exec();
+        res.json(products);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //post sản phẩm
 export const create =async (req, res) => {
     try {
@@ -28,7 +50,7 @@ export const create =async (req, res) => {
 
 export const read = async(req, res) => {
     try {
-        const product=await Product.findOne({_id:req.params.id}).exec();
+        const product=await Product.findOne({_id:req.params.id }).exec();
         res.json(product)
     } catch (error) {
         res.status(400).json({
@@ -49,7 +71,7 @@ export const remove =async (req, res) => {
 //   res.json(products.filter((item) => item.id === +req.params.id));
 };
 export const update= async(req, res) => {
-    const codition ={id:req.params.id}
+    const codition ={_id:req.params.id}
     const update = req.body
 
 try {
@@ -64,3 +86,10 @@ try {
 
     // res.json(products.map((item) => item.id ==req.params.id ? req.body :item));
   };
+
+ export const search=async(req,res)=>{
+  const searchString= req.query.q ? req.query.q : "";
+  const result = await Product.find({$text : {$search:searchString}}).exec();
+  res.json(result)
+  }
+  

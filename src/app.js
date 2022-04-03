@@ -6,8 +6,9 @@ import mongoose from "mongoose";
 
 import router from '../routers/product'
 import news from "../routers/new";
-import User from "../routers/user";
-
+import auth from "../routers/auth";
+import category from "../routers/category";
+import user from "../routers/user";
 const app = express();
 app.use(cors()); //middrewe
 app.use(morgan('tiny')); //hiển thị log trên server 
@@ -17,7 +18,9 @@ app.use(express.json()); //párser kieu du lieu
 //router
 app.use("/api",news);
 app.use("/api",router);
-app.use(User);
+app.use("/api",user);
+app.use("/api",auth);
+app.use("/api",category)
 //connect datebase
 mongoose.connect('mongodb://localhost:27017/we16309')
 .then(()=>console.log("kết nối thành công"))
